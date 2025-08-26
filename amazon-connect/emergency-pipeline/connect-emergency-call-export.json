@@ -1,0 +1,177 @@
+{
+  "Version": "2019-10-30",
+  "StartAction": "5636a38a-4ffc-4370-b092-fe19368b3f2c",
+  "Metadata": {
+    "entryPointPosition": {
+      "x": 40,
+      "y": 260
+    },
+    "ActionMetadata": {
+      "f7288863-97e0-4661-8552-07f480c82ab3": {
+        "position": {
+          "x": 1120,
+          "y": 0
+        }
+      },
+      "emergency-call-ec2": {
+        "position": {
+          "x": 840,
+          "y": 260
+        },
+        "isFriendlyName": true,
+        "parameters": {
+          "LambdaFunctionARN": {
+            "displayName": "emergency-call-ec2"
+          }
+        },
+        "dynamicMetadata": {}
+      },
+      "03bedcfc-2691-42b2-89b9-722bbb605fa2": {
+        "position": {
+          "x": 560,
+          "y": 260
+        }
+      },
+      "5356a6df-4176-4121-bac2-741943d28670": {
+        "position": {
+          "x": 1400,
+          "y": 260
+        }
+      },
+      "5636a38a-4ffc-4370-b092-fe19368b3f2c": {
+        "position": {
+          "x": 280,
+          "y": 260
+        },
+        "conditions": [],
+        "conditionMetadata": [
+          {
+            "id": "b4188156-4c48-47fa-9341-78c458b709ab",
+            "operator": {
+              "name": "Equals",
+              "value": "Equals",
+              "shortDisplay": "="
+            },
+            "value": "+49171123456789"
+          }
+        ]
+      },
+      "9bd99f3e-32c2-464e-903b-a15be67c833d": {
+        "position": {
+          "x": 840,
+          "y": 520
+        }
+      }
+    },
+    "Annotations": [],
+    "name": "emergency-call",
+    "description": "",
+    "type": "contactFlow",
+    "status": "PUBLISHED",
+    "hash": {}
+  },
+  "Actions": [
+    {
+      "Parameters": {
+        "Text": "Your EC2 instance with the id $.External.body got created. Please remove it when you are done. Ending the call now. "
+      },
+      "Identifier": "f7288863-97e0-4661-8552-07f480c82ab3",
+      "Type": "MessageParticipant",
+      "Transitions": {
+        "NextAction": "5356a6df-4176-4121-bac2-741943d28670",
+        "Errors": [
+          {
+            "NextAction": "5356a6df-4176-4121-bac2-741943d28670",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Parameters": {
+        "LambdaFunctionARN": "arn:aws:lambda:eu-central-1:123456789012:function:emergency-call-ec2",
+        "InvocationTimeLimitSeconds": "8",
+        "InvocationType": "SYNCHRONOUS",
+        "ResponseValidation": {
+          "ResponseType": "JSON"
+        }
+      },
+      "Identifier": "emergency-call-ec2",
+      "Type": "InvokeLambdaFunction",
+      "Transitions": {
+        "NextAction": "f7288863-97e0-4661-8552-07f480c82ab3",
+        "Errors": [
+          {
+            "NextAction": "5356a6df-4176-4121-bac2-741943d28670",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Parameters": {
+        "Text": "Thank you for calling the emergency number. Your EC2 instance will be created, please wait."
+      },
+      "Identifier": "03bedcfc-2691-42b2-89b9-722bbb605fa2",
+      "Type": "MessageParticipant",
+      "Transitions": {
+        "NextAction": "emergency-call-ec2",
+        "Errors": [
+          {
+            "NextAction": "5356a6df-4176-4121-bac2-741943d28670",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Parameters": {},
+      "Identifier": "5356a6df-4176-4121-bac2-741943d28670",
+      "Type": "DisconnectParticipant",
+      "Transitions": {}
+    },
+    {
+      "Parameters": {
+        "ComparisonValue": "$.CustomerEndpoint.Address"
+      },
+      "Identifier": "5636a38a-4ffc-4370-b092-fe19368b3f2c",
+      "Type": "Compare",
+      "Transitions": {
+        "NextAction": "9bd99f3e-32c2-464e-903b-a15be67c833d",
+        "Conditions": [
+          {
+            "NextAction": "03bedcfc-2691-42b2-89b9-722bbb605fa2",
+            "Condition": {
+              "Operator": "Equals",
+              "Operands": [
+                "+491711234567"
+              ]
+            }
+          }
+        ],
+        "Errors": [
+          {
+            "NextAction": "9bd99f3e-32c2-464e-903b-a15be67c833d",
+            "ErrorType": "NoMatchingCondition"
+          }
+        ]
+      }
+    },
+    {
+      "Parameters": {
+        "Text": "You are not authorized. Please use the right number. You will be disconnected right now."
+      },
+      "Identifier": "9bd99f3e-32c2-464e-903b-a15be67c833d",
+      "Type": "MessageParticipant",
+      "Transitions": {
+        "NextAction": "5356a6df-4176-4121-bac2-741943d28670",
+        "Errors": [
+          {
+            "NextAction": "5356a6df-4176-4121-bac2-741943d28670",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    }
+  ]
+}
