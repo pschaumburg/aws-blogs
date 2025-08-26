@@ -13,7 +13,7 @@ def lambda_handler(event, context):
         'MaxCount': 1,
         'KeyName': 'emergency-pipeline-ec2',
         'SecurityGroupIds': ['sg-06ab1cf2182ba8e88'],
-        'SubnetId': 'subnet-029476d9dc82c9bba'
+        'SubnetId': 'subnet-123456d2dc11c5bba'
     }
     
     try:
